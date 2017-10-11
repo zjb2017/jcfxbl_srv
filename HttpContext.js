@@ -29,6 +29,7 @@ function HttpContent(JCCache, request, response, postStr) {
     JCCache.srvCache[srvID] = require(path);
 
     var Form = {};
+    Form.srvID=srvID;
     Form.urlParams = urlParams;
     Form.data = postStr;
     JCCache.srvCache[srvID].doForm(Form, function (ErrCode, msg, result, resultCount) {
