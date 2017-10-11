@@ -1,13 +1,13 @@
 var http = require('http');
 var debug = require('debug')('jcBLLSerlet:main');
-//var HttpContent = require('./HttpContext.js').HttpContent;
+var HttpContent = require('./HttpContext.js').HttpContent;
 
 var port = 1086;
 
 
 //全局缓存
 var JCCache = {};
-JCCache.sqlModuleCache = {};
+JCCache.srvCache = {}; //脚本缓存
 JCCache.SrvState = {};
 
 //客户端请求次数
@@ -20,8 +20,8 @@ JCCache.SrvState.StartTime = new Date();
 
 
 
-//统计60分钟内的平均请求／处理频次
-var TimerTick = 1000 * 60 * 60;
+//统计10分钟内的平均请求／处理频次
+var TimerTick = 1000 * 60 * 10;
 var mydate_t0 = new Date();
 setInterval(function () {
     var mydate = new Date();
@@ -52,10 +52,10 @@ var server = http.createServer(
                 postStr += chunk;
             });
             request.addListener("end", function () {
-               // JCCache.SrvState.RequestCount++;
+                JCCache.SrvState.RequestCount++;
                 //Http上下文处理
-                //HttpContent(JCCache, request, response, postStr);
-                console.log(postStr);
+                HttpContent(JCCache, request, response, postStr);
+                //console.log(postStr);
 
             });
         }
